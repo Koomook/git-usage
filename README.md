@@ -259,3 +259,29 @@ git config receive.denynonfastforwards false
   tg = tag
   df = diff 
 ```
+
+## 실수로 git reset --hard 했을 때
+
+[stackoverflow](https://stackoverflow.com/questions/5788037/recover-from-git-reset-hard/5788069)
+
+```
+# add 를 한 파일은 .git/lost-found/other
+# commit 은 .git/lost-found/commit
+git fsck --lost-found
+```
+
+```
+$ git reflog show
+93567ad HEAD@{0}: reset: moving to HEAD@{6}    
+203e84e HEAD@{1}: reset: moving to HEAD@{1}    
+9937a76 HEAD@{2}: reset: moving to HEAD@{2}
+203e84e HEAD@{3}: checkout: moving from master to master
+203e84e HEAD@{4}: reset: moving to HEAD~1
+9937a76 HEAD@{5}: reset: moving to HEAD~1
+d5bb59f HEAD@{6}: reset: moving to HEAD~1
+9300f9d HEAD@{7}: commit: fix-bug
+
+# said the commit to be recovered back is on 9300f9d (with commit message fix-bug)
+$ git reset HEAD@{7}
+```
+
